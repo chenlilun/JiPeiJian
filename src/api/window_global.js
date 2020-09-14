@@ -13,4 +13,3 @@ const ipPort = 'http://192.168.0.225:8000/sap/bc/zh/eam/spapplylist?sap-client=2
 export default {
   ipPort
 }
-
