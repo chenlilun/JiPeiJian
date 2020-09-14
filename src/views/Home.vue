@@ -1,80 +1,84 @@
 <template>
   <div id="app">
-    <van-nav-bar title="丝车详情" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="领料单" left-text="返回" left-arrow @click-left="onClickLeft" />
 
     <div class="button-type">
-      <van-button type="primary" @click="type(0)">有领料号</van-button>
-      <van-button type="info" @click="type(1)">无领料号</van-button>
-    </div>
-    <div class="type-content">
-      <div v-show="numberType==0">
-        <van-cell title="请选择日期" :value="calendarDate" @click="calendarShow=true" />
-        <van-calendar :min-date="minDate" v-model="calendarShow" @confirm="onConfirm" />
-      </div>
-      <div v-show="numberType==1"></div>
-    </div>
-
-    <div style="margin: 10px;">
-      <!-- <van-button round block plain hairline type="primary">{{silkCarCode}}</van-button> -->
-      <van-field v-model="silkCarCode" center clearable label="丝车条码" placeholder="请扫描丝车条码">
-        <template #button>
-          <van-button size="small" type="primary" @click="find">查询</van-button>
-        </template>
-      </van-field>
-    </div>
-
-    <ol style>
-      <!-- <li v-for="(item, index ) in list" :key="index">{{ item.batch }}</li> -->
-      <main v-for="(item, index ) in list" :key="index">
-        <section class="item">
-          <!-- <div class="left"></div> -->
-          <div class="right">
-            <a @click.prevent>数量:{{item.silkCarRowColList.length}}</a>
-            <a @click.prevent>{{item.batch}}</a>
-            <a @click.prevent>{{item.line+'/'+item.machine+'/'+item.doffNum}}</a>
-            <a @click.prevent>{{item.grade}}</a>
-          </div>
-        </section>
-      </main>
-    </ol>
-    <van-popup
-      v-model="show"
-      close-icon-position="top-left"
-      closeable
-      position="right"
-      :style="{ height: '100%' , width : '70%'  }   "
-    >
-      <div style="margin-top: 30px;margin-left: 8px">
-        <van-steps direction="vertical" :active="0">
-          <van-step v-for="(item  , index) in events" :key="index">
-            <div>
-              <h3>操作类型:{{item.operate}}</h3>
+      <van-tabs class="type-content" color="#1989fa" line-width="25px">
+        <van-tab title="有领料号">
+          <div>
+            <div class="calendar">
+              <van-cell title="请选择日期" :value="calendarDate" @click="calendarShow=true" />
+              <van-calendar :min-date="minDate" v-model="calendarShow" @confirm="onConfirm" />
             </div>
-            <h3>操作人:{{item.post+' ' +item.operator}}</h3>
-            <h4>时间:{{ getTime(item.operateTime) }}</h4>
-            <van-collapse v-model="activeNames">
-              <van-collapse-item title="操作丝锭" :name="index">
-                <p v-for="(i, index ) in item.silkCodes" :key="index">{{i}}</p>
-              </van-collapse-item>
-            </van-collapse>
+            <div
+              class="materuak-item"
+              v-for="(item, index) in materuakRequisitionzListType0"
+              :key="index"
+            >
+              <div class="content">
+                <div class="title">申请单号:</div>
+                <div class="text">{{item.APPLY_CODE}}</div>
+              </div>
+              <div class="content">
+                <div class="title">厂库名称:</div>
+                <div class="text">{{item.HOUSE_NAME}}</div>
+              </div>
+              <div class="content">
+                <div class="title">物料号:</div>
+                <div class="text">{{item.SP_CODE}}</div>
+              </div>
+              <div class="content">
+                <div class="title">物料描述:</div>
+                <div class="text">{{item.SP_DESC}}</div>
+              </div>
+              <div class="content">
+                <div class="title">领料人:</div>
+                <div class="text">{{item.APPLY_USER}}</div>
+              </div>
+              <div class="content">
+                <div class="title">申请数量</div>
+                <input class="inp" type="number" v-model="item.inputKey" />
+              </div>
+              <van-button
+                v-show="materuakRequisitionzListType0.length>0"
+                style="width:100%;margin-top: 20px;"
+                type="info"
+                @click="submitType0(item)"
+              >提交</van-button>
+            </div>
+          </div>
+        </van-tab>
+        <van-tab title="无领料号">
+          <div>
+            <div
+              class="materuak-item1"
+              v-for="(item, index) in materuakRequisitionzListType1"
+              :key="index"
+            >
+              <div class="content1">
+                <div class="title">条码:</div>
+                <div class="text">{{item.BARCODE}}</div>
+              </div>
+              <div class="content">
+                <div class="title">数量:</div>
+                <div class="text">{{item.MENGE}}</div>
+              </div>
+              <div class="content">
+                <div class="title">成本中心:</div>
+                <div class="text">{{item.KOSTL}}</div>
+              </div>
+            </div>
             <van-button
-              style="margin-top: 5px"
-              type="danger"
-              v-if="item.recover"
-              @click="recover(item)"
-            >撤销</van-button>
-            <van-divider
-              :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
-            >分割线</van-divider>
-          </van-step>
-        </van-steps>
-      </div>
-    </van-popup>
-
-    <!-- <van-field readonly name="picker" :value="capacity" label="丝锭数量:" placeholder />
-    <van-field readonly :value="capacity" label="线别/位号/落次:" placeholder />-->
-
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+              v-show="materuakRequisitionzListType1.length>0"
+              style="width:90%;margin-top: 20px;margin-bottom: 20px;"
+              type="info"
+              @click="submitType1"
+            >提交</van-button>
+          </div>
+        </van-tab>
+      </van-tabs>
+    </div>
+    <div class="type-content"></div>
   </div>
 </template>
 
@@ -112,13 +116,40 @@ export default {
       factoryCode: "",
       companyCode: "",
       username: "",
-      numberType: 0,
       calendarShow: false,
       minDate: new Date(2019, 0, 1),
       calendarDate: "",
+      materuakRequisitionzListType0: [],
+      materuakRequisitionzListType1: [
+        {
+          ITEM: "10",
+          BARCODE: "100003001/200281/TEST/1TES3",
+          MENGE: 12.5,
+          KOSTL: "921012",
+        },
+        {
+          ITEM: "20",
+          BARCODE: "100003002/200281/TEST23/1TES3",
+          MENGE: 150,
+          KOSTL: "921012",
+        },
+      ],
     };
   },
   methods: {
+    submitType0(item) {
+      console.log(JSON.stringify(item));
+      this.$api
+        .submit({
+          BUDAT: "",
+          APPLY_CODE: item.APPLY_CODE,
+          SOURCE: "PDA",
+          PDA_CODE: "123456",
+          DATA: item.submitList,
+        })
+        .then((res) => {});
+    },
+    submitType1() {},
     formatDate(date) {
       console.log(date.getFullYear());
       return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
@@ -128,62 +159,44 @@ export default {
       this.calendarDate = this.formatDate(date);
       //查询
 
-      this.$api.getCompany().then((res) => {
-        console.log(res, "res");
-        Toast(res);
-      });
-    },
-    type(number) {
-      this.numberType = number;
-    },
-    recover(item) {
-      // Toast.loading({
-      //     message: '撤销...',
-      //     forbidClick: true,
-      //     loadingType: 'spinner',
-      //     duration:0
-      // });
-      console.log("aaa");
-      let arr = [];
-      arr.push(item);
-
+      let datatime = `${this.CurentTime(date)}`;
+      this.companyCode = 9200;
       this.$api
-        .silkSeparateRecover({
-          post: this.name,
-          modifier: this.userId,
-          silkCarCode: this.silkCarCode,
-          events: arr,
+        .getMateruakRequisition({
+          APPLYDATE: datatime,
+          BUKRS: this.companyCode,
         })
         .then((res) => {
-          if (res.data.status === "200") {
-            this.find();
-            Toast.clear();
-            Toast.success(res.data.msg);
+          if (res.APPLYLISTS != null && res.APPLYLISTS.length > 0) {
+            this.materuakRequisitionzListType0 = res.APPLYLISTS.map((item) => {
+              item.inputKey = 0;
+              item.submitList = [];
+              return item;
+            });
+            console.log(this.materuakRequisitionzListType0);
           } else {
-            Toast.clear();
-            Toast(res.data.msg);
+            this.materuakRequisitionzListType0 = [];
+            Toast("没有物料单数据");
           }
         });
     },
-    find() {
-      if (this.silkCarCode) {
-        this.getSilkcarDetails(this.silkCarCode);
-      }
+    CurentTime(now) {
+      var year = now.getFullYear(); //年
+      var month = now.getMonth() + 1; //月
+      var day = now.getDate(); //日
+      var clock = year;
+      if (month < 10) clock += "0";
+      clock += month;
+      if (day < 10) clock += "0";
+      clock += day;
+      return clock;
     },
-    getTime: function (date) {
-      return moment(new Date(date)).format("YYYY-MM-DD HH:mm:ss");
-    },
+
     onClickLeft() {
       Toast("返回");
       window.android.finish();
     },
-    onClickRight() {
-      // Toast("按钮3333");
-      // this.$router.push({
-      //   path: '/SilkUnbind',
-      // })
-      this.show = true;
-    },
+
     callByAndroid(code) {
       Toast(code);
       this.silkCarCode = code;
@@ -241,9 +254,15 @@ export default {
     },
   },
   created() {
+    //公司清单
     this.$api.getCompany().then((res) => {
       console.log(res, "res");
-      Toast(res);
+      //  Toast(res);
+    });
+    //工厂清单
+    this.$api.getfactory().then((res) => {
+      console.log(res, "工厂");
+      // Toast(res);
     });
 
     this.userId = this.$route.query.userId;
@@ -251,7 +270,8 @@ export default {
     this.username = this.$route.query.username;
     this.factoryCode = this.$route.query.factoryCode;
     this.companyCode = this.$route.query.companyCode;
-    Toast(this.username + this.factoryCode + this.companyCode);
+
+    // Toast(this.username + this.factoryCode + this.companyCode);
   },
   mounted() {
     window.callByAndroid = this.callByAndroid;

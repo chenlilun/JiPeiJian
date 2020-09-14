@@ -56,21 +56,6 @@ axios.interceptors.response.use(
     }
   }
 )
-const api = {
-  spapplylist: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=bukrs'
-}
-
-export const getCompany = (params, data) => {
-  return axios({
-    method: 'GET',
-    url: api.spapplylist,
-    // withCredentials: true, // 默认的
-    auth: {
-      username: 'zhangyong',
-      password: '34567890'
-    }
-  }).then((res) => res.data)
-}
 const service = axios.create({
   baseURL: '/api',
   timeout: 30000,
@@ -78,11 +63,71 @@ const service = axios.create({
     Authorization: 'Basic emhhbmd5b25nOjM0NTY3ODkw',
     Accept: 'application/json, text/plain, */*',
     Cookie: 'sap-usercontext=sap-client=222'
-  }
+  },
+  auth: userInfo
 })
+const api = {
+  companyListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=bukrs',
+  factoryListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=werks&bukrs=9200',
+  materuakRequisition: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
+  submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=222'
+}
+const userInfo = {
+  username: 'zhangyong',
+  password: '34567890'
+}
+//公司清单
+const getCompany = (params, data) => {
+  return axios({
+    method: 'GET',
+    url: api.companyListing,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//工厂清单
+const getfactory = (params, data) => {
+  return axios({
+    method: 'GET',
+    url: api.factoryListing,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//领料单
+const getMateruakRequisition = (params, data) => {
+  return axios({
+    method: 'POST',
+    url: api.materuakRequisition,
+    data: params,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//提交
+const submit = (params, data) => {
+  return axios({
+    method: 'POST',
+    url: api.submit,
+    data: params,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
 export default {
   axios,
   getCompany,
+  getfactory,
+  getMateruakRequisition,
+  submit,
   dataUrl: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
 
   // 获取所有等级

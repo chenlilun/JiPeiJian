@@ -11,115 +11,180 @@
   flex-direction: column;
   width: 100%;
   margin-top: 10px;
-}
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #4d5966;
-
-  margin-top: 1px;
-}
-
-.van-field__label {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  flex: none;
   box-sizing: border-box;
-  width: 8.2em;
-  margin-right: 3.2vw;
-  color: #646566;
-  text-align: left;
-  word-wrap: break-word;
-}
 
-/*顶部块样式*/
-header {
-  width: 100%;
-  /*设置为伸缩盒子*/
-  display: flex;
-}
 
-header>a {
-  /*width: 100%;*/
-  /*flex:设置当前子元素占据父容器剩余宽度的比例*/
-  flex: 1;
-}
+  .calendar {
+    margin-top: 10px;
+    overflow: hidden;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
 
-header>a>img {
-  width: 100%;
-}
+  .materuak-item {
+    margin-top: 20px;
+    display: flex;
 
-/*主体内容块样式*/
-main {
-  width: 100%;
-  padding: 0 10px;
-  /*设置盒模型*/
-  box-sizing: border-box;
-}
+    flex-direction: column;
+    min-height: 250px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    padding: 8px;
 
-main>.item {
-  width: 100%;
-  height: 150px;
-  background-color: #57c3ae;
-  border-radius: 10px;
-  margin-top: 10px;
-  /*设置为伸缩盒子*/
-  display: flex;
-}
+    .content {
+      display: flex;
+      flex-direction: row;
+      min-height: 40px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeeee;
 
-main>.item:nth-of-type(2) {
-  background-color: #33aa46;
-}
+      .title {
+        display: flex;
+        justify-content: flex-start;
+        color: #000;
+        font-size: 20px;
+        overflow: hidden;
+      }
 
-main>.item:nth-of-type(3) {
-  background-color: #aa4b40;
-}
+      .text {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
+        color: #888;
+        font-size: 18px;
+      }
 
-main>.item:nth-of-type(4) {
-  background-color: #445faa;
-}
+      .inp {
+        display: flex;
+        text-align: end;
+        justify-content: center;
+        flex: 6;
+        color: #888;
+        font-size: 18px;
+        border: 1px solid #eeeeee
+      }
+    }
 
-main>.item>.left {
-  flex: 1;
-}
+    .content1 {
+      display: flex;
+      flex-direction: column;
+      min-height: 40px;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeeee;
 
-main>.item>.right {
-  flex: 2;
-  /*设置换行显示*/
-  flex-wrap: wrap;
-  /*设置为伸缩盒子*/
-  display: flex;
-}
+      .title {
+        display: flex;
+        justify-content: flex-start;
+        color: #000;
+        font-size: 20px;
+        overflow: hidden;
+      }
 
-main>.item>.right>a {
-  /*如果想让子元素换行显示，必须为子元素设置宽度*/
-  width: 25%;
-  box-sizing: border-box;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  display: block;
-  color: #fff;
-  line-height: 50px;
-  text-align: center;
-  text-decoration: none;
-}
+      .text {
+        display: flex;
 
-main>.item>.right>a:nth-last-of-type(-n + 1) {
-  border-bottom: none;
-}
+        flex: 1;
+        color: #888;
+        font-size: 18px;
+      }
 
-main>.extra {
-  width: 100%;
-  display: flex;
-}
+      .inp {
+        display: flex;
+        text-align: end;
+        justify-content: center;
+        flex: 6;
+        color: #888;
+        font-size: 18px;
+        border: 1px solid #eeeeee
+      }
+    }
 
-main>.extra>a {
-  flex: 1;
-}
+  }
 
-main>.extra>a>img {
-  width: 100%;
+  .materuak-item1 {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 130px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    padding: 8px;
+
+    .content {
+      display: flex;
+      flex-direction: row;
+      min-height: 40px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeeee;
+
+      .title {
+        display: flex;
+        justify-content: flex-start;
+        color: #000;
+        font-size: 20px;
+        overflow: hidden;
+      }
+
+      .text {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
+        color: #888;
+        font-size: 18px;
+      }
+
+      .inp {
+        display: flex;
+        text-align: end;
+        justify-content: center;
+        flex: 6;
+        color: #888;
+        font-size: 18px;
+        border: 1px solid #eeeeee
+      }
+    }
+
+    .content1 {
+      display: flex;
+      flex-direction: column;
+      min-height: 40px;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeeee;
+
+      .title {
+        display: flex;
+        justify-content: flex-start;
+        color: #000;
+        font-size: 20px;
+        overflow: hidden;
+      }
+
+      .text {
+        display: flex;
+
+        flex: 1;
+        color: #888;
+        font-size: 18px;
+      }
+
+      .inp {
+        display: flex;
+        text-align: end;
+        justify-content: center;
+        flex: 6;
+        color: #888;
+        font-size: 18px;
+        border: 1px solid #eeeeee
+      }
+    }
+
+  }
 }
