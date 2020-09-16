@@ -70,7 +70,10 @@ const api = {
   companyListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=bukrs',
   factoryListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=werks&bukrs=9200',
   materuakRequisition: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
-  submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=222'
+  submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=222',
+  costCenter: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=kostl&bukrs=9200',
+  theInventoryLocation: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=lgort&werks=9210',
+  receivingPaty: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=holder&bukrs=9200'
 }
 const userInfo = {
   username: 'zhangyong',
@@ -87,11 +90,45 @@ const getCompany = (params, data) => {
     .then((res) => res.data)
     .catch((err) => err)
 }
+
 //工厂清单
 const getfactory = (params, data) => {
   return axios({
     method: 'GET',
     url: api.factoryListing,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//收货方
+const receivingPaty = (params, data) => {
+  return axios({
+    method: 'GET',
+    url: api.receivingPaty,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//库存地点
+const theInventoryLocation = (params, data) => {
+  return axios({
+    method: 'GET',
+    url: api.theInventoryLocation,
+    // withCredentials: true, // 默认的
+    auth: userInfo
+  })
+    .then((res) => res.data)
+    .catch((err) => err)
+}
+//成本中心
+const costCenter = (params, data) => {
+  return axios({
+    method: 'GET',
+    url: api.costCenter,
     // withCredentials: true, // 默认的
     auth: userInfo
   })
@@ -128,6 +165,9 @@ export default {
   getfactory,
   getMateruakRequisition,
   submit,
+  costCenter,
+  theInventoryLocation,
+  receivingPaty,
   dataUrl: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
 
   // 获取所有等级
