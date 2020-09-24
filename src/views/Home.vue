@@ -1,78 +1,131 @@
 <template>
-  <div id="app">
-    <van-nav-bar title="领料单" left-text="返回" left-arrow @click-left="onClickLeft" />
-    <van-button style="width:100%;margin-top: 20px;" type="info" @click="callByAndroid">扫码数据</van-button>
+  <div>
+    <van-nav-bar
+      title="领料单"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
+    <!--    <input class="inp" v-model="qr" style="width: 95%" />
+    <van-button
+      style="width: 80%; margin-top: 5px"
+      type="info"
+      @click="callByAndroid"
+      >添加扫码数据</van-button
+    > -->
+
     <div class="button-type">
-      <van-tabs class="type-content" color="#1989fa" line-width="25px" @click="onType">
+      <van-tabs
+        class="type-content"
+        color="#1989fa"
+        line-width="25px"
+        @click="onType"
+      >
         <van-tab title="有领料号">
           <div>
             <div class="calendar">
-              <van-cell title="请选择日期" :value="calendarDate" @click="calendarShow=true" />
-              <van-calendar :min-date="minDate" v-model="calendarShow" @confirm="onConfirm" />
+              <van-cell
+                title="请选择日期"
+                :value="calendarDate"
+                @click="calendarShow = true"
+              />
+              <van-calendar
+                :min-date="minDate"
+                v-model="calendarShow"
+                @confirm="onConfirm"
+              />
             </div>
-            <div class="materuak-item" v-for="(item, index) in materuakOdd" :key="index">
+            <div
+              class="materuak-item"
+              v-for="(item, index) in materuakOdd"
+              :key="index"
+            >
               <div
                 class="content"
-                style="background-color: #999;padding-left:5px;padding-right:5px"
+                style="
+                  background-color: #999;
+                  padding-left: 5px;
+                  padding-right: 5px;
+                "
               >
                 <div class="title">申请单号:</div>
-                <div class="text" style="color:#000;">{{item.odd}}</div>
+                <div class="text" style="color: #000">{{ item.odd }}</div>
               </div>
-              <div class="odd-list" v-for="(odditem, j) in item.oddList" :key="j">
+              <div
+                class="odd-list"
+                v-for="(odditem, j) in item.oddList"
+                :key="j"
+              >
                 <div class="content">
                   <div class="title">物料号:</div>
-                  <div class="text">{{odditem.SP_CODE}}</div>
+                  <div class="text">{{ odditem.SP_CODE }}</div>
                 </div>
                 <div class="content">
                   <div class="title">厂库名称:</div>
-                  <div class="text">{{odditem.HOUSE_NAME}}</div>
+                  <div class="text">{{ odditem.HOUSE_NAME }}</div>
                 </div>
 
                 <div class="content">
                   <div class="title">物料描述:</div>
-                  <div class="text">{{odditem.SP_DESC}}</div>
+                  <div class="text">{{ odditem.SP_DESC }}</div>
                 </div>
                 <div class="content">
                   <div class="title">领料人:</div>
-                  <div class="text">{{odditem.APPLY_USER}}</div>
+                  <div class="text">{{ odditem.APPLY_USER }}</div>
                 </div>
                 <div class="content">
                   <div class="title">物料总数:</div>
-                  <div class="text">{{odditem.APPLY_NUM}}</div>
+                  <div class="text">{{ odditem.APPLY_NUM }}</div>
                 </div>
-                <!-- 
-                   SP_CODE: cc[0], //物料号
-          BARCODE: tm, //物料描述
-          PC: cc[1], KOSTL: this.costBean.KOSTL, //成本中心
-          KTEXT: this.costBean.KTEXT, //成本中心姓名
-          LGORT: this.locationBean.LGORT, //库存地
-          LGOBE:this.locationBean.LGOBE,
-                WEMPF: this.receivingBean.WEMPF, //收货方-->
-                <div class="odd-item" v-for="(materialitem, o) in odditem.materialList" :key="o">
+
+                <div
+                  class="odd-item"
+                  v-for="(materialitem, o) in odditem.materialList"
+                  :key="o"
+                >
                   <div class="content">
                     <div class="title">批次:</div>
-                    <div class="text">{{materialitem.PC}}</div>
-                  </div>
-                  <div class="content">
-                    <div class="title">成本中心:</div>
-                    <div class="text">{{materialitem.KTEXT}}</div>
-                    <div class="change-but" @click="costAction1 = true;temporaryCost=materialitem">改</div>
+                    <div class="text">{{ materialitem.PC }}</div>
                   </div>
                   <div class="content">
                     <div class="title">库存地点:</div>
-                    <div class="text">{{materialitem.LGOBE}}</div>
+                    <div class="text">{{ materialitem.LGOBE }}</div>
                     <div
                       class="change-but"
-                      @click="locationAction1 = true;temporaryLocation=materialitem"
-                    >改</div>
+                      @click="
+                        locationAction1 = true;
+                        temporaryLocation = materialitem;
+                      "
+                    >
+                      改
+                    </div>
                   </div>
                   <div class="content">
-                    <div class="title">收货方:</div>
-                    <div class="text">{{materialitem.WEMPF}}</div>
+                    <div class="title">成本中心:</div>
+                    <div class="text">{{ materialitem.KTEXT }}</div>
                     <div
                       class="change-but"
-                      @click="receivingAction1 = true;temporaryReceiving=materialitem"
-                    >改</div>
+                      @click="
+                        costAction1 = true;
+                        temporaryCost = materialitem;
+                      "
+                    >
+                      改
+                    </div>
+                  </div>
+
+                  <div class="content">
+                    <div class="title">收货方:</div>
+                    <div class="text">{{ materialitem.WEMPF }}</div>
+                    <div
+                      class="change-but"
+                      @click="
+                        receivingAction1 = true;
+                        temporaryReceiving = materialitem;
+                      "
+                    >
+                      改
+                    </div>
                   </div>
                   <div class="content">
                     <div class="title">申请数量</div>
@@ -80,98 +133,170 @@
                       class="inp"
                       type="number"
                       v-model="materialitem.MENGE"
-                      style="background-color: #eee;"
+                      style="background-color: #eee"
                     />
                   </div>
                 </div>
               </div>
 
               <van-button
-                v-show="materuakOdd.length>0"
-                style="width:100%;margin-top: 20px;"
+                v-show="materuakOdd.length > 0"
+                style="width: 100%; margin-top: 20px"
                 type="info"
                 @click="submitType0(item)"
-              >提交</van-button>
+                >提交</van-button
+              >
             </div>
           </div>
         </van-tab>
         <van-tab title="无领料号">
-          <div>
-            <div
-              class="materuak-item1"
-              v-for="(item, index) in materuakRequisitionzListType1"
-              :key="index"
-            >
-              <div class="content1">
-                <div class="text">{{item.BARCODE}}</div>
+          <div
+            class="materuak-item1"
+            v-for="(item, index) in materuakRequisitionzListType1"
+            :key="index"
+          >
+            <div class="content1">
+              <div class="text">{{ item.BARCODE }}</div>
+            </div>
+            <div class="content">
+              <div class="title">库存地点:</div>
+              <div class="text">{{ item.LGOBE }}</div>
+              <div
+                class="change-but"
+                @click="
+                  locationAction1 = true;
+                  temporaryLocation = item;
+                "
+              >
+                改
               </div>
             </div>
-            <van-button
-              v-show="materuakRequisitionzListType1.length>0"
-              style="width:90%;margin-top: 20px;margin-bottom: 20px;"
-              type="info"
-              @click="submitType1"
-            >提交</van-button>
+            <div class="content">
+              <div class="title">成本中心:</div>
+              <div class="text">{{ item.KTEXT }}</div>
+              <div
+                class="change-but"
+                @click="
+                  costAction1 = true;
+                  temporaryCost = item;
+                "
+              >
+                改
+              </div>
+            </div>
+
+            <div class="content">
+              <div class="title">收货方:</div>
+              <div class="text">{{ item.WEMPF }}</div>
+              <div
+                class="change-but"
+                @click="
+                  receivingAction1 = true;
+                  temporaryReceiving = item;
+                "
+              >
+                改
+              </div>
+            </div>
+            <div class="content">
+              <div class="title">申请数量</div>
+              <input
+                class="inp"
+                type="number"
+                v-model="item.MENGE"
+                style="background-color: #eee"
+              />
+            </div>
           </div>
+          <van-button
+            v-show="materuakRequisitionzListType1.length > 0"
+            style="width: 90%; margin-top: 20px; margin-bottom: 20px"
+            type="info"
+            @click="submitType1"
+            >提交</van-button
+          >
         </van-tab>
       </van-tabs>
     </div>
     <div class="type-content"></div>
     <van-popup v-model="onePop" :close-on-click-overlay="false" class="one-pop">
       <div class="title">请选择初始值</div>
-      <div class="item" @click="costAction = true">
-        <div>选择成本中心</div>
-        <van-icon name="arrow" />
-      </div>
-      <div v-show="costActionText!=''" class="text">{{costActionText}}</div>
       <div class="item" @click="locationAction = true">
         <div>选择库存地</div>
         <van-icon name="arrow" />
       </div>
-      <div v-show="locationActionText!=''" class="text">{{locationActionText}}</div>
+      <div v-show="locationActionText != ''" class="text">
+        {{ locationActionText }}
+      </div>
+      <div class="item" @click="costAction = true">
+        <div>选择成本中心</div>
+        <van-icon name="arrow" />
+      </div>
+      <div v-show="costActionText != ''" class="text">{{ costActionText }}</div>
+
       <div class="item" @click="receivingAction = true">
         <div>选择收货方</div>
         <van-icon name="arrow" />
       </div>
-      <div v-show="receivingActionText!=''" class="text">{{receivingActionText}}</div>
-      <van-button style="width:100%;margin-top: 20px;" type="info" @click="selectOne">确定</van-button>
+      <div v-show="receivingActionText != ''" class="text">
+        {{ receivingActionText }}
+      </div>
+      <van-button
+        style="width: 100%; margin-top: 20px"
+        type="info"
+        @click="selectOne"
+        >确定</van-button
+      >
     </van-popup>
-    <van-action-sheet
-      v-model="costAction1"
-      :actions="costCenterList"
-      @select="changeCBZX"
-      :close-on-click-action="true"
-    />
-    <van-action-sheet
-      v-model="locationAction1"
-      :actions="kcList"
-      @select="changeLocation"
-      :close-on-click-action="true"
-    />
-    <van-action-sheet
-      v-model="receivingAction1"
-      :actions="receivingPatyList"
-      @select="changeReceiving"
-      :close-on-click-action="true"
-    />
-    <van-action-sheet
-      v-model="costAction"
-      :actions="costCenterList"
-      @select="onCostCenterSelect"
-      :close-on-click-action="true"
-    />
-    <van-action-sheet
-      v-model="locationAction"
-      :actions="kcList"
-      @select="onKcSelect"
-      :close-on-click-action="true"
-    />
-    <van-action-sheet
-      v-model="receivingAction"
-      :actions="receivingPatyList"
-      @select="onReceivingSelect"
-      :close-on-click-action="true"
-    />
+    <!-- v-modle導致界面無法滑動 -->
+    <div v-show="costAction1" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="costCenterList"
+        @select="changeCBZX"
+        :close-on-click-action="true"
+      />
+    </div>
+    <div v-show="locationAction1" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="kcList"
+        @select="changeLocation"
+        :close-on-click-action="true"
+      />
+    </div>
+    <div v-show="receivingAction1" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="receivingPatyList"
+        @select="changeReceiving"
+        :close-on-click-action="true"
+      />
+    </div>
+    <div v-show="costAction" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="costCenterList"
+        @select="onCostCenterSelect"
+        :close-on-click-action="true"
+      />
+    </div>
+    <div v-show="locationAction" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="kcList"
+        @select="onKcSelect"
+        :close-on-click-action="true"
+      />
+    </div>
+    <div v-show="receivingAction" class="sheet">
+      <van-action-sheet
+        :value="true"
+        :actions="receivingPatyList"
+        @select="onReceivingSelect"
+        :close-on-click-action="true"
+      />
+    </div>
   </div>
 </template>
 
@@ -183,6 +308,8 @@ export default {
   components: {},
   data() {
     return {
+      // 000000001800875298/190328/三角带SPB-2765 GB/T11544 橡胶
+      qr: "",
       temporaryCost: {},
       temporaryLocation: {},
       temporaryReceiving: {},
@@ -217,80 +344,6 @@ export default {
       materuakOdd: [],
       tabType: 0,
       materuakRequisitionzListType1: [],
-      APPLYLISTS: [
-        {
-          APPLY_CODE: "SQ2006000071",
-          APPLY_NUM: 30.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9308",
-          HOUSE_NAME: "",
-          ID: "",
-          SP_CODE: "000000001800875298",
-          SP_DESC: "扁锉mm 粗齿",
-          SP_UNIT: "EA",
-        },
-        {
-          APPLY_CODE: "SQ2006000071",
-          APPLY_NUM: 300.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9301",
-          HOUSE_NAME: "五金劳保库",
-          ID: "",
-          SP_CODE: "000000001800886355",
-          SP_DESC: "印刷册（逸暻化纤）POY工序流程卡12锭",
-          SP_UNIT: "BEN",
-        },
-        {
-          APPLY_CODE: "SQ2006000071",
-          APPLY_NUM: 10.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9301",
-          HOUSE_NAME: "五金劳保库",
-          ID: "",
-          SP_CODE: "000000001000062410",
-          SP_DESC: "视镜SF31 PN16 DN25 FF 20#+石英玻璃",
-          SP_UNIT: "EA",
-        },
-        {
-          APPLY_CODE: "SQ2006000072",
-          APPLY_NUM: 300.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9301",
-          HOUSE_NAME: "五金劳保库",
-          ID: "",
-          SP_CODE: "000000001800886355",
-          SP_DESC: "印刷册（逸暻化纤）POY工序流程卡12锭",
-          SP_UNIT: "BEN",
-        },
-        {
-          APPLY_CODE: "SQ2006000072",
-          APPLY_NUM: 10.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9301",
-          HOUSE_NAME: "五金劳保库",
-          ID: "",
-          SP_CODE: "000000001000062410",
-          SP_DESC: "视镜SF31 PN16 DN25 FF 20#+石英玻璃",
-          SP_UNIT: "EA",
-        },
-        {
-          APPLY_CODE: "SQ2006000073",
-          APPLY_NUM: 10.0,
-          APPLY_USER: "丁琼",
-          FACTORY: "9210",
-          HOUSE_CODE: "9301",
-          HOUSE_NAME: "五金劳保库",
-          ID: "",
-          SP_CODE: "000000001000062410",
-          SP_DESC: "视镜SF31 PN16 DN25 FF 20#+石英玻璃",
-          SP_UNIT: "EA",
-        },
-      ],
       QRNumber: 0,
       costCenterList: [], //成本中心
       kcList: [], //库存地点
@@ -299,10 +352,10 @@ export default {
   },
   methods: {
     selectOne() {
-      if (this.costActionText != "") {
+      if (this.locationActionText != "") {
         this.onePop = false;
       } else {
-        Toast("请选择成本中心");
+        Toast("请选择库存地");
       }
     },
     changeCBZX(item) {
@@ -340,6 +393,7 @@ export default {
     submitType0(item) {
       console.log(JSON.stringify(item));
       let dataList = [];
+      let flag = false;
       item.oddList.forEach((i) => {
         let num = 0;
         i.materialList.forEach((t) => {
@@ -357,25 +411,85 @@ export default {
         });
         console.log(num, i.APPLY_NUM);
         if (i.APPLY_NUM != num) {
+          flag = false;
           Toast("物料号" + i.SP_CODE + "请检查申请数量");
           return;
+        } else {
+          flag = true;
         }
       });
+      if (dataList.length > 0) {
+        if (flag) {
+          Toast.loading({
+            duration: 0, // 持续展示 toast
+            forbidClick: true,
+            message: "提交中",
+          });
+          let time = new Date();
+          //console.log(JSON.stringify(dataList));
+          this.$api
+            .submit({
+              BUDAT: time,
+              APPLY_CODE: item.APPLY_CODE,
+              SOURCE: "PDA",
+              PDA_CODE: "123456",
+              DATA: dataList,
+            })
+            .then((res) => {
+              Toast.clear();
+              if (res != null && res.PICKID != "") {
+                Toast.success("成功");
+                this.materuakOdd = [];
+              }
+            })
+            .catch((err) => {
+              Toast(err);
+            });
+        }
+      } else {
+        Toast("请扫描物料");
+      }
+    },
+    submitType1() {
+      let dataList = [];
+      this.materuakRequisitionzListType1.forEach((t) => {
+        dataList.push({
+          BARCODE: t.BARCODE, //物料描述
+          ITEM: t.ITEM,
+          KOSTL: t.KOSTL, //成本中心
+          KTEXT: t.KTEXT, //成本中心姓名
+          LGORT: t.LGORT, //库存地
+          LGOBE: t.LGOBE,
+          MENGE: parseInt(t.MENGE),
+          WEMPF: t.WEMPF, //收货方
+        });
+      });
       //console.log(JSON.stringify(dataList));
+      let time = new Date();
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: "提交中",
+      });
       this.$api
         .submit({
-          BUDAT: "",
-          APPLY_CODE: item.APPLY_CODE,
+          BUDAT: time,
+          APPLY_CODE: "",
           SOURCE: "PDA",
           PDA_CODE: "123456",
           DATA: dataList,
         })
-        .then((res) => {})
+        .then((res) => {
+          Toast.clear();
+          if (res != null && res.PICKID != "") {
+            Toast.success("成功");
+            this.materuakRequisitionzListType1 = [];
+          }
+        })
         .catch((err) => {
-          //console.log(JSON.stringify(err));
+          Toast(err);
         });
     },
-    submitType1() {},
     onType(index, title) {
       this.tabType = index;
       console.log(this.tabType);
@@ -389,15 +503,21 @@ export default {
       this.calendarDate = this.formatDate(date);
       //查询
       let datatime = `${this.CurentTime(date)}`;
-      this.companyCode = 9200;
+      // this.companyCode = 9200;
+      Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: "加载中",
+      });
       this.$api
         .getMateruakRequisition({
           APPLYDATE: datatime,
           BUKRS: this.companyCode,
         })
         .then((res) => {
-          if (res.APPLYLISTS != null /*&& res.APPLYLISTS.length > 0 */) {
-            this.materuakRequisitionzListType0 = this.APPLYLISTS;
+          Toast.clear();
+          if (res.APPLYLISTS != null && res.APPLYLISTS.length > 0) {
+            this.materuakRequisitionzListType0 = res.APPLYLISTS;
 
             let odd = [];
             //添加领料单
@@ -413,10 +533,7 @@ export default {
               this.materuakRequisitionzListType0.forEach((i) => {
                 if (item.odd === i.APPLY_CODE) {
                   i.materialList = []; //物料数组
-                  /*  i.inputKey = 0;
-                  i.costCenter = "";
-                  i.theInventoryLocation = "";
-                  i.receivingPaty = ""; */
+
                   item.oddList.push(i);
                   console.log(JSON.stringify(i.APPLY_CODE));
                 }
@@ -429,28 +546,10 @@ export default {
             this.materuakOdd = [];
             Toast("没有物料单数据");
           }
+        })
+        .catch((err) => {
+          Toast(err);
         });
-    },
-    //对象去重
-    deWeightFour(arr) {
-      var obj = {};
-      arr = arr.reduce(function (a, b) {
-        obj[b.odd] ? "" : (obj[b.odd] = true && a.push(b));
-        return a;
-      }, []);
-      return arr;
-    },
-
-    CurentTime(now) {
-      var year = now.getFullYear(); //年
-      var month = now.getMonth() + 1; //月
-      var day = now.getDate(); //日
-      var clock = year;
-      if (month < 10) clock += "0";
-      clock += month;
-      if (day < 10) clock += "0";
-      clock += day;
-      return clock;
     },
 
     onClickLeft() {
@@ -459,11 +558,15 @@ export default {
     },
 
     callByAndroid(code) {
-      // Toast(code);
       //物料 批次
-      let tm =
-        "000000001000062410/190328/三角带SPB-2765 GB/T11544 橡胶" +
-        Math.floor(Math.random() * 10);
+      if (code != null && code != "" && typeof code == "string") {
+        this.qr = code;
+      }
+      // Toast("进入");
+      console.log(JSON.stringify(this.qr));
+      let tm = this.qr;
+      // "000000001000062410/190328/三角带SPB-2765 GB/T11544 橡胶"; /* +
+      // Math.floor(Math.random() * 10) */
 
       var cc = tm.split("/");
       if (cc.length > 1) {
@@ -478,7 +581,7 @@ export default {
           KTEXT: this.costBean.KTEXT, //成本中心姓名
           LGORT: this.locationBean.LGORT, //库存地code
           LGOBE: this.locationBean.LGOBE, //库存地名字
-          MENGE: 0,
+          MENGE: 1,
           WEMPF: this.receivingBean.WEMPF, //收货方
         };
         if (this.tabType == 0) {
@@ -498,8 +601,10 @@ export default {
                 if (cc[0] == i.SP_CODE) {
                   if (i.materialList.length > 0) {
                     let repetitionFlag = true;
+                    //去重
                     i.materialList.forEach((t) => {
                       if (tm == t.BARCODE) {
+                        t.MENGE = parseInt(t.MENGE) + 1;
                         repetitionFlag = false;
                         return;
                       }
@@ -521,8 +626,22 @@ export default {
             Toast("请选择日期获取领料单");
           }
         } else if (this.tabType == 1) {
-          this.materuakRequisitionzListType1.push(bean);
+          let repetitionFlag1 = true;
+          //去重
+          this.materuakRequisitionzListType1.forEach((t) => {
+            if (tm == t.BARCODE) {
+              t.MENGE = parseInt(t.MENGE) + 1;
+              repetitionFlag1 = false;
+              return;
+            }
+          });
+          //没重复
+          if (repetitionFlag1) {
+            this.materuakRequisitionzListType1.push(bean);
+          }
         }
+      } else {
+        //Toast("this.qr");
       }
       //console.log(JSON.stringify(cc));
     },
@@ -539,10 +658,10 @@ export default {
 
     //获取成本中心
     getCostCenterData() {
-      this.$api.costCenter().then((res) => {
+      this.$api.costCenter(this.companyCode).then((res) => {
         if (res != null && Array.isArray(res)) {
           this.costCenterList = res.map((item) => {
-            item.name = item.KTEXT;
+            item.name = item.KTEXT + "-" + item.KOSTL;
             return item;
           });
           this.onePop = true;
@@ -552,10 +671,10 @@ export default {
     },
     //库存地
     getTheInventoryLocationData() {
-      this.$api.theInventoryLocation().then((res) => {
+      this.$api.theInventoryLocation(this.factoryCode).then((res) => {
         if (res != null && Array.isArray(res)) {
           this.kcList = res.map((item) => {
-            item.name = item.LGOBE;
+            item.name = item.LGOBE + "-" + item.LGORT;
             return item;
           });
         }
@@ -564,7 +683,7 @@ export default {
     },
     //收货方
     getReceivingPatyData() {
-      this.$api.receivingPaty().then((res) => {
+      this.$api.receivingPaty(this.companyCode).then((res) => {
         if (res != null && Array.isArray(res)) {
           this.receivingPatyList = res.map((item) => {
             item.name = item.WEMPF;
@@ -573,6 +692,27 @@ export default {
         }
         console.log("收货方", JSON.stringify(res));
       });
+    },
+    //对象去重
+    deWeightFour(arr) {
+      var obj = {};
+      arr = arr.reduce(function (a, b) {
+        obj[b.odd] ? "" : (obj[b.odd] = true && a.push(b));
+        return a;
+      }, []);
+      return arr;
+    },
+
+    CurentTime(now) {
+      var year = now.getFullYear(); //年
+      var month = now.getMonth() + 1; //月
+      var day = now.getDate(); //日
+      var clock = year;
+      if (month < 10) clock += "0";
+      clock += month;
+      if (day < 10) clock += "0";
+      clock += day;
+      return clock;
     },
   },
   created() {

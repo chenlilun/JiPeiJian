@@ -57,7 +57,7 @@ axios.interceptors.response.use(
   }
 )
 const service = axios.create({
-  baseURL: '/api',
+  baseURL: '',
   timeout: 30000,
   headers: {
     Authorization: 'Basic emhhbmd5b25nOjM0NTY3ODkw',
@@ -71,9 +71,10 @@ const api = {
   factoryListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=werks&bukrs=9200',
   materuakRequisition: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
   submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=222',
-  costCenter: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=kostl&bukrs=9200',
-  theInventoryLocation: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=lgort&werks=9210',
-  receivingPaty: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=holder&bukrs=9200'
+  costCenter: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=kostl&bukrs=',
+  theInventoryLocation: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=lgort&werks=',
+  //9200
+  receivingPaty: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=holder&bukrs='
 }
 const userInfo = {
   username: 'zhangyong',
@@ -103,10 +104,10 @@ const getfactory = (params, data) => {
     .catch((err) => err)
 }
 //收货方
-const receivingPaty = (params, data) => {
+const receivingPaty = (bukrs) => {
   return axios({
     method: 'GET',
-    url: api.receivingPaty,
+    url: api.receivingPaty + bukrs,
     // withCredentials: true, // 默认的
     auth: userInfo
   })
@@ -114,10 +115,10 @@ const receivingPaty = (params, data) => {
     .catch((err) => err)
 }
 //库存地点
-const theInventoryLocation = (params, data) => {
+const theInventoryLocation = (werks) => {
   return axios({
     method: 'GET',
-    url: api.theInventoryLocation,
+    url: api.theInventoryLocation + werks,
     // withCredentials: true, // 默认的
     auth: userInfo
   })
@@ -125,10 +126,10 @@ const theInventoryLocation = (params, data) => {
     .catch((err) => err)
 }
 //成本中心
-const costCenter = (params, data) => {
+const costCenter = (bukrs) => {
   return axios({
     method: 'GET',
-    url: api.costCenter,
+    url: api.costCenter + bukrs,
     // withCredentials: true, // 默认的
     auth: userInfo
   })
@@ -167,92 +168,5 @@ export default {
   submit,
   costCenter,
   theInventoryLocation,
-  receivingPaty,
-  dataUrl: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
-
-  // 获取所有等级
-  getGrades() {
-    return axios.get(this.dataUrl + '/api/grade/all')
-  },
-  AddGrades(data) {
-    return axios.post(baseUrl + '/api/grade/add', data)
-  },
-  SaveGrades(data) {
-    return axios.post(baseUrl + '/api/grade/edit', data)
-  },
-  // 获取在机生产计划
-  getLinePlans(data) {
-    return axios.post(baseUrl + '/api/productPlan/getInProductPlans', data)
-  },
-  // 丝车: 获取丝车详情
-  getSilkss(code) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/silkCarOnline/get/' + code)
-  },
-  // 丝车: 解绑
-  silkUnbind(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/silkCarOnline/separate', data)
-  },
-  // 丝车: 定等
-  dingDeng(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/silkCarOnline/graded', data)
-  },
-  // 丝车: 拼车
-  poolSilkCar(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/carPool/silkCarPooling', data)
-  },
-  // 落筒: 自动线人工落筒 扫机台
-  getSilkCarDoff(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/doff/getSilkCarDoffSpec', data)
-  },
-  // 落筒: 扫完机台获取位数
-  getMqDoffMessage(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/doff/getMqDoffMessage', data)
-  },
-  // 落筒确定
-  manualDoff(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/doff/manualDoff', data)
-  },
-  // 丝车: 人工打包
-  handPack(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/pack/handPack', data)
-  },
-  // 丝车: 暂存箱打包
-  temporaryPack(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/pack/temporaryPack', data)
-  },
-  // 入暂存箱
-  packInTemBox(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/pack/inTemporaryBox', data)
-  },
-
-  // 获取所有异常
-  getAllExceptions() {
-    // console.log("data" +  data.toString())
-    return axios.get(baseUrl + '/api/silkException/findAll')
-  },
-  // 获取所有备注
-  getAllSilkNote() {
-    // console.log("data" +  data.toString())
-    return axios.get(baseUrl + '/api/silkNote/findAll')
-  },
-  // 解绑撤销
-  silkSeparateRecover(data) {
-    // console.log("data" +  data.toString())
-    return axios.post(baseUrl + '/api/silkCarOnline/silkSeparateRecover', data)
-  },
-  // 获取所有备注
-  getCompanyHengyi() {
-    // console.log("data" +  data.toString())
-    return axios.get(baseUrl + '&query=bukrs')
-  }
+  receivingPaty
 }
