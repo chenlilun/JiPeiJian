@@ -10,7 +10,7 @@ import myUtils from './util/myUtils'
 /* import Es6Promise from 'es6-promise'
 require('es6-promise').polyfill()
 Es6Promise.polyfill() */
-// Toast.setDefaultOptions({ duration: 4000 })
+
 Vue.prototype.$api = api
 Vue.prototype.$myUtils = myUtils
 Vue.config.productionTip = false

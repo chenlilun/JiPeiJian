@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="main">
     <van-nav-bar
       title="领料单"
       left-text="返回"
       left-arrow
       @click-left="onClickLeft"
     />
-    <!--    <input class="inp" v-model="qr" style="width: 95%" />
+    <!--     <input v-model="qr" style="width: 95%" />
     <van-button
       style="width: 80%; margin-top: 5px"
       type="info"
@@ -132,6 +132,7 @@
                     <input
                       class="inp"
                       type="number"
+                      oninput="value=value.replace(/[^\d]/g,'')"
                       v-model="materialitem.MENGE"
                       style="background-color: #eee"
                     />
@@ -141,7 +142,7 @@
 
               <van-button
                 v-show="materuakOdd.length > 0"
-                style="width: 100%; margin-top: 20px"
+                class="submit-but"
                 type="info"
                 @click="submitType0(item)"
                 >提交</van-button
@@ -149,7 +150,7 @@
             </div>
           </div>
         </van-tab>
-        <van-tab title="无领料号">
+        <van-tab title="无领料号" style="text-align: center">
           <div
             class="materuak-item1"
             v-for="(item, index) in materuakRequisitionzListType1"
@@ -202,6 +203,7 @@
               <div class="title">申请数量</div>
               <input
                 class="inp"
+                oninput="value=value.replace(/[^\d]/g,'')"
                 type="number"
                 v-model="item.MENGE"
                 style="background-color: #eee"
@@ -210,7 +212,8 @@
           </div>
           <van-button
             v-show="materuakRequisitionzListType1.length > 0"
-            style="width: 90%; margin-top: 20px; margin-bottom: 20px"
+            class="submit-but"
+            style="width: 90%"
             type="info"
             @click="submitType1"
             >提交</van-button
@@ -303,6 +306,7 @@
 
 <script>
 import { Toast } from "vant";
+Toast.setDefaultOptions({ duration: 2000 });
 export default {
   name: "app",
   components: {},
@@ -348,6 +352,8 @@ export default {
       costCenterList: [], //成本中心
       kcList: [], //库存地点
       receivingPatyList: [], //收货方
+      screenHeightNoChange: true,
+      pdaCode: "",
     };
   },
   methods: {
@@ -359,14 +365,17 @@ export default {
       }
     },
     changeCBZX(item) {
+      this.costAction1 = false;
       this.temporaryCost.KTEXT = item.KTEXT;
       this.temporaryCost.KOSTL = item.KOSTL;
     },
     changeLocation(item) {
+      this.locationAction1 = false;
       this.temporaryLocation.LGORT = item.LGORT;
       this.temporaryLocation.LGOBE = item.LGOBE;
     },
     changeReceiving(item) {
+      this.receivingAction1 = false;
       this.temporaryReceiving.WEMPF = item.WEMPF;
     },
     onCostCenterSelect(item, b, c) {
@@ -432,13 +441,13 @@ export default {
               BUDAT: time,
               APPLY_CODE: item.APPLY_CODE,
               SOURCE: "PDA",
-              PDA_CODE: "123456",
+              PDA_CODE: this.pdaCode,
               DATA: dataList,
             })
             .then((res) => {
               Toast.clear();
+              Toast.success(res.MESSAGE + "");
               if (res != null && res.PICKID != "") {
-                Toast.success("成功");
                 this.materuakOdd = [];
               }
             })
@@ -476,13 +485,13 @@ export default {
           BUDAT: time,
           APPLY_CODE: "",
           SOURCE: "PDA",
-          PDA_CODE: "123456",
+          PDA_CODE: this.pdaCode,
           DATA: dataList,
         })
         .then((res) => {
           Toast.clear();
+          Toast.success(res.MESSAGE + "");
           if (res != null && res.PICKID != "") {
-            Toast.success("成功");
             this.materuakRequisitionzListType1 = [];
           }
         })
@@ -732,7 +741,7 @@ export default {
     this.username = this.$route.query.username;
     this.factoryCode = this.$route.query.factoryCode;
     this.companyCode = this.$route.query.companyCode;
-
+    this.pdaCode = this.$route.query.pdaCode;
     this.getCostCenterData();
     this.getTheInventoryLocationData();
     this.getReceivingPatyData();
@@ -740,6 +749,14 @@ export default {
   },
   mounted() {
     window.callByAndroid = this.callByAndroid;
+    const self = this;
+    window.onresize = () => {
+      if (self.oldFullHeight) {
+        self.screenHeightNoChange =
+          document.documentElement.clientHeight === self.oldFullHeight;
+        console.log(" self.screenHeightNoChange " + self.screenHeightNoChange);
+      }
+    };
   },
 };
 </script>
