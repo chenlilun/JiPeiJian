@@ -33,7 +33,9 @@
   font-size: 28px;
 }
 
-
+.van-toast__text{
+  word-break: break-all;
+}
 
 .button-type {
   display: flex;
@@ -51,7 +53,15 @@
   padding: 2px;
   font-weight: 500;
 }
-
+.calendar {
+  margin-top: 10px;
+  overflow: hidden;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align:start;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
 .type-content {
   display: flex;
   flex-direction: column;
@@ -64,15 +74,7 @@
     overflow-y: scroll;
   }
 
-  .calendar {
-    margin-top: 10px;
-    overflow: hidden;
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 
-  }
 
   .materuak-item {
     margin: 10px 20px 15px 20px;
@@ -271,7 +273,11 @@
   }
 }
 
-
+.two-pop{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
 .one-pop {
   display: flex;

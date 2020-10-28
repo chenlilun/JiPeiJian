@@ -6,13 +6,13 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <!--     <input v-model="qr" style="width: 95%" />
+<!--    <input v-model="qr" style="width: 95%" />
     <van-button
       style="width: 80%; margin-top: 5px"
       type="info"
       @click="callByAndroid"
       >添加扫码数据</van-button
-    > -->
+    >  -->
 
     <div class="button-type">
       <van-tabs
@@ -25,17 +25,27 @@
           <div>
             <div class="calendar">
               <van-cell
-                title="请选择日期"
+                title="领料单日期"
                 style="font-size: 23px"
                 :value="calendarDate"
                 @click="calendarShow = true"
               />
-              <van-calendar
+
+        <!--       <van-calendar
                 :min-date="minDate"
                 v-model="calendarShow"
                 @confirm="onConfirm"
+              /> -->
+            </div>
+            <div class="calendar">
+              <van-cell
+                title="过账日期"
+                style="font-size: 23px"
+                :value="guozhangDate"
+                @click="guozhangpop = true"
               />
             </div>
+
             <div
               class="materuak-item"
               v-for="(item, index) in materuakOdd"
@@ -152,6 +162,14 @@
           </div>
         </van-tab>
         <van-tab title="无领料号" style="text-align: center">
+           <div class="calendar">
+              <van-cell
+                title="过账日期"
+                style="font-size: 23px"
+                :value="guozhangDate"
+                @click="guozhangpop = true"
+              />
+            </div>
           <div
             class="materuak-item1"
             v-for="(item, index) in materuakRequisitionzListType1"
@@ -223,6 +241,30 @@
       </van-tabs>
     </div>
     <div class="type-content"></div>
+
+    <van-popup v-model="calendarShow" class="two-pop" position="bottom">
+       <van-datetime-picker
+        v-model="guozhangtime"
+        type="date"
+        title="选择领料单日期"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onConfirm"
+        @cancel="oncancellld"
+    />
+    </van-popup>
+    <van-popup v-model="guozhangpop" class="two-pop" position="bottom">
+       <van-datetime-picker
+       v-model="guozhangtime"
+       type="date"
+        title="选择过账日期"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onConfirmgc"
+        @cancel="oncancegz"
+    />
+    </van-popup>
+
     <van-popup v-model="onePop" :close-on-click-overlay="false" class="one-pop">
       <div class="title">请选择初始值</div>
       <div class="item" @click="locationAction = true">
@@ -307,7 +349,11 @@
 
 <script>
 import { Toast } from "vant";
-Toast.setDefaultOptions({ duration: 2000 });
+import {
+    format,
+    fromNow
+} from 'silly-datetime';
+Toast.setDefaultOptions({ duration: 2500 });
 export default {
   name: "app",
   components: {},
@@ -342,8 +388,12 @@ export default {
       factoryCode: "",
       companyCode: "",
       username: "",
+      guozhangDate:"",
       calendarShow: false,
-      minDate: new Date(2019, 0, 1),
+      guozhangtime: new Date(),
+      guozhangpop:false,
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2050, 10, 1),
       calendarDate: "",
       materuakRequisitionzListType0: [],
       materuakOdd: [],
@@ -354,7 +404,8 @@ export default {
       kcList: [], //库存地点
       receivingPatyList: [], //收货方
       screenHeightNoChange: true,
-      pdaCode: "",
+      pdaCode: ""
+     
     };
   },
   methods: {
@@ -401,6 +452,10 @@ export default {
       this.receivingBean = item;
     },
     submitType0(item) {
+        if(this.guozhangDate==""||this.guozhangDate==null){
+        Toast("请选择过账日期")
+        return;
+      }
       console.log(JSON.stringify(item));
       let dataList = [];
       let flag = false;
@@ -431,16 +486,16 @@ export default {
       if (dataList.length > 0) {
         if (flag) {
           Toast.loading({
-            duration: 0, // 持续展示 toast
+            duration: 3000, // 持续展示 toast
             forbidClick: true,
             message: "提交中",
           });
-          let time = new Date();
+         
           //console.log(JSON.stringify(dataList));
           this.$api
             .submit({
-              BUDAT: time,
-              APPLY_CODE: item.APPLY_CODE,
+              BUDAT: this.guozhangDate,
+              APPLY_CODE: item.odd,
               SOURCE: "PDA",
               PDA_CODE: this.pdaCode,
               DATA: dataList,
@@ -461,6 +516,14 @@ export default {
       }
     },
     submitType1() {
+
+
+      if(this.guozhangDate==""||this.guozhangDate==null){
+        Toast("请选择过账日期")
+        return;
+      }
+
+
       let dataList = [];
       this.materuakRequisitionzListType1.forEach((t) => {
         dataList.push({
@@ -475,15 +538,14 @@ export default {
         });
       });
       //console.log(JSON.stringify(dataList));
-      let time = new Date();
       Toast.loading({
-        duration: 0, // 持续展示 toast
+        duration: 3000, // 持续展示 toast
         forbidClick: true,
         message: "提交中",
       });
       this.$api
         .submit({
-          BUDAT: time,
+          BUDAT: this.guozhangDate,
           APPLY_CODE: "",
           SOURCE: "PDA",
           PDA_CODE: this.pdaCode,
@@ -508,9 +570,22 @@ export default {
       console.log(date.getFullYear());
       return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     },
+    oncancellld(){
+      this.calendarShow = false;
+    },
+    /* 过账日期 */
+    onConfirmgc(date){
+       this.guozhangpop = false;
+    
+       this.guozhangDate = require('silly-datetime').format(date, 'YYYY-MM-DD');
+    },
+    oncancegz(){
+      this.guozhangpop = false;
+    },
+
     onConfirm(date) {
       this.calendarShow = false;
-      this.calendarDate = this.formatDate(date);
+      this.calendarDate = require('silly-datetime').format(date, 'YYYY-MM-DD');
       //查询
       let datatime = `${this.CurentTime(date)}`;
       // this.companyCode = 9200;
@@ -568,6 +643,8 @@ export default {
     },
 
     callByAndroid(code) {
+   
+
       //物料 批次
       if (code != null && code != "" && typeof code == "string") {
         this.qr = code;
@@ -726,6 +803,7 @@ export default {
     },
   },
   created() {
+  
     //公司清单
     /*  this.$api.getCompany().then((res) => {
       console.log(res, "res");
