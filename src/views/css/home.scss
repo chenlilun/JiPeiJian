@@ -1,6 +1,39 @@
 .main {
   height: 100vh;
+
+  .van-nav-bar {
+    .van-nav-bar__title {
+      max-width: 60%;
+      margin: 0 auto;
+      color: #323233;
+      font-weight: 500;
+      font-size: 6vw;
+    }
+  }
+
 }
+
+.fontsize-1 {
+  font-size: 20px;
+}
+
+.fontsize-1 {
+  font-size: 22px;
+}
+
+.fontsize-2 {
+  font-size: 24px;
+}
+
+.fontsize-3 {
+  font-size: 26px;
+}
+
+.fontsize-4 {
+  font-size: 28px;
+}
+
+
 
 .button-type {
   display: flex;
@@ -9,7 +42,15 @@
   justify-content: space-around;
 }
 
-
+.van-tab__text--ellipsis {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  font-size: 6vw;
+  padding: 2px;
+  font-weight: 500;
+}
 
 .type-content {
   display: flex;
@@ -30,6 +71,7 @@
     margin-right: 20px;
     border-radius: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
   }
 
   .materuak-item {
@@ -229,10 +271,13 @@
   }
 }
 
+
+
 .one-pop {
   display: flex;
   flex-direction: column;
   width: 80%;
+
   background-color: #fff;
   padding: 5px;
 

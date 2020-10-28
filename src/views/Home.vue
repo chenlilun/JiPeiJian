@@ -26,6 +26,7 @@
             <div class="calendar">
               <van-cell
                 title="请选择日期"
+                style="font-size: 23px"
                 :value="calendarDate"
                 @click="calendarShow = true"
               />
