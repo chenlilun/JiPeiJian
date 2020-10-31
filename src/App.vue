@@ -6,10 +6,20 @@
 
 
 <script>
+import RouterView from "@/components/RouterView";
 export default {
   name: "App",
+  components: {
+    RouterView,
+  },
 };
 </script>
 
-<style>
+<style lang="scss">
+.van-toast--text {
+  .van-toast__text {
+    font-size: 23px;
+    word-break: break-all;
+  }
+}
 </style>

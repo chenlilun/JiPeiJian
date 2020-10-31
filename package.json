@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "es6-promise": "^4.2.8",
+    "js-cookie": "^2.2.1",
     "jsonp": "^0.2.1",
     "moment": "^2.27.0",
     "silly-datetime": "^0.1.2",
