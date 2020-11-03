@@ -6,7 +6,7 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <!--  <input v-model="qr" style="width: 95%; margin-top: 50px" />
+    <!--     <input v-model="qr" style="width: 95%; margin-top: 50px" />
     <van-button style="width: 80%" type="info" @click="callByAndroid(qr)"
       >添加扫码数据</van-button
     > -->
@@ -118,6 +118,7 @@
           border-radius: 10px;
           margin-left: 2.5%;
           margin-top: 5px;
+          margin-bottom: 10px;
         "
         type="info"
         @click="submitType"
@@ -157,15 +158,16 @@
 
 <script>
 import { Toast } from "vant";
+import { Dialog } from "vant";
 import { format, fromNow } from "silly-datetime";
 Toast.setDefaultOptions({ duration: 2500 });
 export default {
   name: "app",
-  components: {},
+  components: { [Dialog.Component.name]: Dialog.Component },
   data() {
     return {
       //qr 000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶
-      qr: "000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶",
+      qr: "000000001000027264/190328/三角带SPB-2765 GB/T11544 橡胶",
       factoryCode: "",
       companyCode: "",
       pdaCode: "",
@@ -192,6 +194,18 @@ export default {
     };
   },
   methods: {
+    blurIn() {
+      window.scrollTo(0, Math.max(this.scrollHieght - 1, 0));
+    },
+    scrollHeight() {
+      return (
+        document.documentElement.scrollTop ||
+        window.pageYOffset ||
+        document.body.scrollTop ||
+        0
+      );
+    },
+
     onConfirmcbzx(item, index) {
       this.cbzx = false;
       this.temporaryCost.KTEXT = this.costCenterList[index].KTEXT;
@@ -230,6 +244,8 @@ export default {
               KTEXT: t.KTEXT, //成本中心姓名
               LGORT: t.LGORT, //库存地
               LGOBE: t.LGOBE,
+              WERKS: this.factoryCode,
+              BUKRS: this.companyCode,
               MENGE: parseInt(t.MENGE),
               WEMPF: t.WEMPF, //收货方
             });
@@ -262,7 +278,7 @@ export default {
       if (dataList.length > 0) {
         if (flag) {
           Toast.loading({
-            duration: 3000, // 持续展示 toast
+            duration: 0, // 持续展示 toast
             forbidClick: true,
             message: "提交中",
           });
@@ -274,14 +290,23 @@ export default {
               SOURCE: "PDA",
               PDA_CODE: this.pdaCode,
               DATA: dataList,
+              APPLY_USER: this.usernameCode,
+              IS_COMMIT: "X", //直接过账
+              tiaojian: [{ key_parameter: name }],
             })
             .then((res) => {
               Toast.clear();
-              Toast.success(res.MESSAGE + "");
+              // Toast.success(res.MESSAGE + "");
               if (res != null && res.PICKID != "") {
-                this.info.oddList = [];
-                this.fanhui = res;
-                this.$router.go(-1);
+                // this.info.oddList = [];
+                // this.fanhui = res;
+                Dialog.alert({
+                  title: "返回消息",
+                  message: res.MESSAGE,
+                }).then(() => {
+                  this.$router.go(-1);
+                });
+                //
               }
             })
             .catch((err) => {
@@ -414,13 +439,17 @@ export default {
 
   mounted() {
     window.callByAndroid = this.callByAndroid;
-    window.onresize = () => {
-      if (self.oldFullHeight) {
-        self.screenHeightNoChange =
-          document.documentElement.clientHeight === self.oldFullHeight;
-        console.log(" self.screenHeightNoChange " + self.screenHeightNoChange);
+
+    window.addEventListener("resize", function () {
+      if (
+        document.activeElement.tagName === "INPUT" ||
+        document.activeElement.tagName === "TEXTAREA"
+      ) {
+        window.setTimeout(function () {
+          document.activeElement.scrollIntoView();
+        }, 0);
       }
-    };
+    });
   },
 };
 </script>

@@ -2,6 +2,8 @@
 import axios from 'axios'
 import vue from '../main.js'
 let serverUrl = '/api/' //本地调试时
+//let sap_client = '222' //本地调试时
+let sap_client = '800' //本地调试时
 // axios.head('Accept','application/json, text/plain, */*')
 // 响应拦截器
 axios.interceptors.response.use(
@@ -20,24 +22,24 @@ axios.interceptors.response.use(
       case 401:
         vue.$notify.error({
           title: '错误',
-          message: '登录信息未认证'
+          message: '登录信息未认证',
         })
         break
       case 403:
         vue.$notify.error({
           title: '错误',
-          message: '您没有权限进行此操作'
+          message: '您没有权限进行此操作',
         })
         break
       case 404:
         vue.$notify.error({
           title: '错误',
-          message: '未找到接口数据'
+          message: '未找到接口数据',
         })
         // store.state.pageLoading = false;
         break
       case 302:
-        window.location = '/'
+        // window.location = '/'
         break
       case 500:
         // vue.$notify.error({
@@ -45,12 +47,12 @@ axios.interceptors.response.use(
         //   message: '服务器错误'
         // })
         localStorage.removeItem('token')
-        window.location = '/'
+        // window.location = '/'
         break
       default:
         vue.$notify.error({
           title: '错误',
-          message: `未知错误 ${error.response.status}`
+          message: `未知错误 ${error.response.status}`,
         })
         return Promise.reject(error)
     }
@@ -62,23 +64,28 @@ const service = axios.create({
   headers: {
     Authorization: 'Basic emhhbmd5b25nOjM0NTY3ODkw',
     Accept: 'application/json, text/plain, */*',
-    Cookie: 'sap-usercontext=sap-client=222'
+    Cookie: 'sap-usercontext=sap-client=222',
   },
-  auth: userInfo
+  auth: userInfo,
 })
 const api = {
-  companyListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=bukrs',
-  factoryListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=werks&bukrs=9200',
-  materuakRequisition: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222',
-  submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=222',
-  costCenter: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=kostl&bukrs=',
-  theInventoryLocation: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=lgort&werks=',
+  companyListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client + '&query=bukrs',
+  factoryListing: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client + '&query=werks&bukrs=9200',
+  materuakRequisition: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client,
+  submit: serverUrl + 'sap/bc/zh/eam/spapplypost?sap-client=' + sap_client,
+  costCenter: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client + '&query=kostl&bukrs=',
+  theInventoryLocation: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client + '&query=lgort&werks=',
   //9200
-  receivingPaty: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=222&query=holder&bukrs='
+  receivingPaty: serverUrl + 'sap/bc/zh/eam/spapplylist?sap-client=' + sap_client + '&query=holder&bukrs=',
 }
-const userInfo = {
+/* const userInfo = {
   username: 'zhangyong',
-  password: '34567890'
+  password: '34567890',
+} */
+//正式
+const userInfo = {
+  username: 'RFC_EAM',
+  password: 'RFC_EAM',
 }
 //公司清单
 const getCompany = (params, data) => {
@@ -86,7 +93,7 @@ const getCompany = (params, data) => {
     method: 'GET',
     url: api.companyListing,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -98,7 +105,7 @@ const getfactory = (params, data) => {
     method: 'GET',
     url: api.factoryListing,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -109,7 +116,7 @@ const receivingPaty = (bukrs) => {
     method: 'GET',
     url: api.receivingPaty + bukrs,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -120,7 +127,7 @@ const theInventoryLocation = (werks) => {
     method: 'GET',
     url: api.theInventoryLocation + werks,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -131,7 +138,7 @@ const costCenter = (bukrs) => {
     method: 'GET',
     url: api.costCenter + bukrs,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -143,7 +150,7 @@ const getMateruakRequisition = (params, data) => {
     url: api.materuakRequisition,
     data: params,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -155,7 +162,7 @@ const submit = (params, data) => {
     url: api.submit,
     data: params,
     // withCredentials: true, // 默认的
-    auth: userInfo
+    auth: userInfo,
   })
     .then((res) => res.data)
     .catch((err) => err)
@@ -168,5 +175,5 @@ export default {
   submit,
   costCenter,
   theInventoryLocation,
-  receivingPaty
+  receivingPaty,
 }

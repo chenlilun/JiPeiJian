@@ -250,20 +250,22 @@
 <script>
 import { Toast } from "vant";
 import { format, fromNow } from "silly-datetime";
+import { Dialog } from "vant";
 export default {
   name: "app",
-  components: {},
+  components: { [Dialog.Component.name]: Dialog.Component },
   data() {
     return {
       qr: "000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶", //二维码数据
       userId: "",
       name: "",
-      username: "",
+      userInfoName: "",
       factoryCode: "",
       companyCode: "",
       pdaCode: "",
       calendarDate: "",
-      linliaodantime: new Date(2020, 5, 18),
+      //  linliaodantime: new Date(2020, 5, 18),
+      linliaodantime: new Date(),
       calendarShow: false,
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2050, 10, 1),
@@ -332,6 +334,8 @@ export default {
             LGOBE: t.LGOBE,
             MENGE: parseInt(t.MENGE),
             WEMPF: t.WEMPF, //收货方
+            WERKS: this.factoryCode,
+            BUKRS: this.companyCode,
           });
         } else {
           console.log(JSON.stringify(t));
@@ -352,13 +356,20 @@ export default {
             APPLY_CODE: "",
             SOURCE: "PDA",
             PDA_CODE: this.pdaCode,
+            APPLY_USER: this.usernameCode,
+            IS_COMMIT: "X", //直接过账
             DATA: dataList,
           })
           .then((res) => {
             Toast.clear();
-            Toast.success(res.MESSAGE + "");
+            //Toast.success(res.MESSAGE + "");
             if (res != null && res.PICKID != "") {
-              this.materuakRequisitionzListType1 = [];
+              Dialog.alert({
+                title: "返回消息",
+                message: res.MESSAGE,
+              }).then(() => {
+                this.materuakRequisitionzListType1 = [];
+              });
             }
           })
           .catch((err) => {
@@ -432,7 +443,7 @@ export default {
     onConfirm(date) {
       this.calendarShow = false;
       this.calendarDate = require("silly-datetime").format(date, "YYYY-MM-DD");
-      let datatime = `${this.CurentTime(date)}`;
+      let datatime = require("silly-datetime").format(date, "YYYYMMDD");
       Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true,
@@ -479,17 +490,7 @@ export default {
           Toast(err);
         });
     },
-    CurentTime(now) {
-      var year = now.getFullYear(); //年
-      var month = now.getMonth() + 1; //月
-      var day = now.getDate(); //日
-      var clock = year;
-      if (month < 10) clock += "0";
-      clock += month;
-      if (day < 10) clock += "0";
-      clock += day;
-      return clock;
-    },
+
     onClickLeft() {
       // Toast("返回");
       window.android.finish();
@@ -608,7 +609,7 @@ export default {
   created() {
     this.userId = this.$route.query.userId;
     this.name = this.$route.query.name;
-    this.username = this.$route.query.username;
+    this.userInfoName = this.$route.query.userInfoName;
     this.factoryCode = this.$route.query.factoryCode;
     this.companyCode = this.$route.query.companyCode;
     this.pdaCode = this.$route.query.pdaCode;
@@ -618,6 +619,7 @@ export default {
     this.$cookie.set("companyCode", this.companyCode);
     this.$cookie.set("pdaCode", this.pdaCode);
     this.$cookie.set("usernameCode", this.usernameCode);
+    this.$cookie.set("userInfoName", this.userInfoName);
     this.locationBean = this.$cookie.getJSON("locationBean");
     this.receivingBean = this.$cookie.getJSON("receivingBean");
     this.costBean = this.$cookie.getJSON("costBean");
@@ -649,6 +651,16 @@ export default {
         console.log(" self.screenHeightNoChange " + self.screenHeightNoChange);
       }
     };
+    window.addEventListener("resize", function () {
+      if (
+        document.activeElement.tagName === "INPUT" ||
+        document.activeElement.tagName === "TEXTAREA"
+      ) {
+        window.setTimeout(function () {
+          document.activeElement.scrollIntoView();
+        }, 0);
+      }
+    });
   },
 };
 </script>

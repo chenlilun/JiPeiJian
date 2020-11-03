@@ -1,6 +1,6 @@
 <template>
     
-  <div class="main">
+  <div>
         <keep-alive>        <router-view v-if="keepAlive" />     </keep-alive>
         <router-view v-if="!keepAlive" />   
   </div>

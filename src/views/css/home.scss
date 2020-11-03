@@ -1,10 +1,26 @@
+.van-dialog{
+  .van-dialog__content{
+    .van-dialog__message{
+      max-height: 60vh;
+      padding: 6.4vw;
+      overflow-y: auto;
+      font-size: 5.733vw;
+      line-height: 5.333vw;
+      white-space: pre-wrap;
+      text-align: center;
+      word-wrap: break-word;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+}
 .main {
-  display: flex;
-  height: 100vh;
+ // display: flex;
   background-color: #fff;
   flex-direction: column;
   align-content: center;
   box-sizing: border-box;
+  padding-bottom: 300px;
+  //margin-bottom: 500px;
   .van-nav-bar {
     position: fixed;
     width: 100%;
