@@ -6,7 +6,7 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <!--     <input v-model="qr" style="width: 95%" />
+    <!--    <input v-model="qr" style="width: 95%; margin-top: 50px" />
     <van-button
       style="width: 80%; margin-top: 5px"
       type="info"
@@ -165,10 +165,33 @@
         </div>
       </van-tab>
     </van-tabs>
+
+    <van-popup v-model="calendarShow" class="two-pop" position="bottom">
+      <van-datetime-picker
+        v-model="linliaodantime"
+        type="date"
+        title="选择领料单日期"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onConfirm"
+        @cancel="calendarShow = false"
+      />
+    </van-popup>
+    <van-popup v-model="guozhangpop" class="two-pop" position="bottom">
+      <van-datetime-picker
+        v-model="guozhangtime"
+        type="date"
+        title="选择过账日期"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onConfirmgz"
+        @cancel="guozhangpop = false"
+      />
+    </van-popup>
     <van-popup
       v-model="showSearch"
-      class="search-pop"
       position="bottom"
+      class="search-pop"
       :style="{ height: '100%', 'background-color': '#eee' }"
     >
       <div style="background-color: #ffffff height: 300px;padding: 10px;">
@@ -192,47 +215,66 @@
         </div>
       </div>
     </van-popup>
-    <van-popup v-model="calendarShow" class="two-pop" position="bottom">
-      <van-datetime-picker
-        v-model="linliaodantime"
-        type="date"
-        title="选择领料单日期"
-        :min-date="minDate"
-        :max-date="maxDate"
-        @confirm="onConfirm"
-        @cancel="calendarShow = false"
-      />
-    </van-popup>
-    <van-popup v-model="guozhangpop" class="two-pop" position="bottom">
-      <van-datetime-picker
-        v-model="guozhangtime"
-        type="date"
-        title="选择过账日期"
-        :min-date="minDate"
-        :max-date="maxDate"
-        @confirm="onConfirmgz"
-        @cancel="guozhangpop = false"
-      />
-    </van-popup>
-    <van-popup v-model="locationAction" class="two-pop" position="bottom">
-      <van-picker
-        show-toolbar
+    <!-- 库存搜索 -->
+    <van-popup
+      v-model="locationAction"
+      position="bottom"
+      class="search-pop"
+      :style="{ height: '100%', 'background-color': '#eee' }"
+    >
+      <van-search
+        class="line"
+        show-action
         v-model="locationActionText"
-        title="请选择库存地"
-        :columns="kcListColumns"
-        @confirm="onConfirmkcd"
+        placeholder="请选择库存地"
+        style="border: 1px solid #ccc"
+        @input="locationOnSearch"
         @cancel="locationAction = false"
       />
+      <div
+        class="search-jg"
+        v-for="(item, index) in kcListColumns"
+        :key="index"
+      >
+        <div>{{ item.LGOBE + "-" + item.LGORT }}</div>
+
+        <van-button
+          style="border-radius: 10px; height: 30px"
+          type="info"
+          @click="onConfirmkcd(item, index)"
+          >确定</van-button
+        >
+      </div>
     </van-popup>
-    <van-popup v-model="cbzx" class="two-pop" position="bottom">
-      <van-picker
-        show-toolbar
+    <van-popup
+      v-model="cbzx"
+      class="search-pop"
+      :style="{ height: '100%', 'background-color': '#eee' }"
+      position="bottom"
+    >
+      <van-search
+        class="line"
+        show-action
         v-model="cbzxText"
-        title="请选择成本中心"
-        :columns="costCenterListColumns"
-        @confirm="onConfirmcbzx"
+        placeholder="请选择成本中心"
+        style="border: 1px solid #ccc"
+        @input="costCenterOnSearch"
         @cancel="cbzx = false"
       />
+      <div
+        class="search-jg"
+        v-for="(item, index) in costCenterListColumns"
+        :key="index"
+      >
+        <div>{{ item.KTEXT + "-" + item.KOSTL }}</div>
+
+        <van-button
+          style="border-radius: 10px; height: 35px"
+          type="info"
+          @click="onConfirmcbzx(item, index)"
+          >确定</van-button
+        >
+      </div>
     </van-popup>
     <van-popup v-model="shouhuo" class="two-pop" position="bottom">
       <van-picker
@@ -264,8 +306,8 @@ export default {
       companyCode: "",
       pdaCode: "",
       calendarDate: "",
-      //  linliaodantime: new Date(2020, 5, 18),
-      linliaodantime: new Date(),
+      linliaodantime: new Date(2020, 5, 18),
+      // linliaodantime: new Date(),
       calendarShow: false,
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2050, 10, 1),
@@ -300,6 +342,27 @@ export default {
     };
   },
   methods: {
+    costCenterOnSearch() {
+      console.log(this.cbzxText);
+      this.costCenterListColumns = [];
+      this.costCenterList.forEach((i) => {
+        if ((i.KTEXT + "-" + i.KOSTL).search(this.cbzxText) != -1) {
+          console.log(i.KTEXT + "-" + i.KOSTL);
+          this.costCenterListColumns.push(i);
+        }
+      });
+    },
+
+    locationOnSearch() {
+      console.log(this.locationActionText);
+      this.kcListColumns = [];
+      this.kcList.forEach((i) => {
+        if ((i.LGOBE + "-" + i.LGORT).search(this.locationActionText) != -1) {
+          this.kcListColumns.push(i);
+        }
+      });
+    },
+
     submitlingniaodan(item) {
       if (this.guozhangDate == "" || this.guozhangDate == null) {
         Toast("请选择过账日期");
@@ -319,12 +382,7 @@ export default {
       }
       let dataList = [];
       this.materuakRequisitionzListType1.forEach((t) => {
-        if (
-          t.KOSTL != null &&
-          t.KTEXT != null &&
-          t.LGORT != null &&
-          t.WEMPF != null
-        ) {
+        if (t.KOSTL != null && t.KTEXT != null && t.LGORT != null) {
           dataList.push({
             BARCODE: t.BARCODE, //物料描述
             ITEM: t.ITEM,
@@ -339,7 +397,7 @@ export default {
           });
         } else {
           console.log(JSON.stringify(t));
-          Toast("请查看库存地,成本中心,收货方是否没有选择");
+          Toast("请查看库存地,成本中心是否没有选择");
         }
       });
       //console.log(JSON.stringify(dataList));
@@ -414,8 +472,8 @@ export default {
     //成本中心
     onConfirmcbzx(item, index) {
       this.cbzx = false;
-      this.cbzxText = item;
-      this.costBean = this.costCenterList[index];
+      this.cbzxText = item.KTEXT + "-" + item.KOSTL;
+      this.costBean = item;
 
       this.$cookie.set("costBean", this.costBean);
       if (this.materuakRequisitionzListType1.length > 0) {
@@ -428,9 +486,8 @@ export default {
     },
     onConfirmkcd(item, index) {
       this.locationAction = false;
-      this.locationActionText = item;
-
-      this.locationBean = this.kcList[index];
+      this.locationActionText = item.LGOBE + "-" + item.LGORT;
+      this.locationBean = item;
       this.$cookie.set("locationBean", this.locationBean);
       if (this.materuakRequisitionzListType1.length > 0) {
         this.materuakRequisitionzListType1.map((item) => {
@@ -473,7 +530,6 @@ export default {
               this.materuakRequisitionzListType0.forEach((i) => {
                 if (item.odd === i.APPLY_CODE) {
                   i.materialList = []; //物料数组
-
                   item.oddList.push(i);
                   console.log(JSON.stringify(i.APPLY_CODE));
                 }
@@ -483,7 +539,9 @@ export default {
             this.materuakOdd = odd;
             console.log(JSON.stringify(this.materuakOdd));
           } else {
-            Toast("没有物料单数据");
+            this.materuakRequisitionzListType0 = [];
+            this.materuakOdd = [];
+            Toast(this.calendarDate + "没有物料单数据");
           }
         })
         .catch((err) => {
@@ -556,15 +614,14 @@ export default {
       this.$api.costCenter(this.companyCode).then((res) => {
         if (res != null && Array.isArray(res)) {
           this.costCenterListColumns = [];
+          let costc = [];
           this.costCenterList = res.map((item) => {
-            this.costCenterListColumns.push(item.KTEXT + "-" + item.KOSTL);
-
+            this.costCenterListColumns.push(item);
+            costc.push(item.KTEXT + "-" + item.KOSTL);
             return item;
           });
           this.onePop = true;
-          localStorage.costCenterListColumns = JSON.stringify(
-            this.costCenterListColumns
-          );
+          localStorage.costCenterListColumns = JSON.stringify(costc);
           localStorage.costCenterList = JSON.stringify(this.costCenterList);
         }
         console.log("成本中心", JSON.stringify(res));
@@ -575,11 +632,13 @@ export default {
       this.$api.theInventoryLocation(this.factoryCode).then((res) => {
         if (res != null && Array.isArray(res)) {
           this.kcListColumns = [];
+          let kc = [];
           this.kcList = res.map((item) => {
-            this.kcListColumns.push(item.LGOBE + "-" + item.LGORT);
+            this.kcListColumns.push(item);
+            kc.push(item.LGOBE + "-" + item.LGORT);
             return item;
           });
-          localStorage.kcListColumns = JSON.stringify(this.kcListColumns);
+          localStorage.kcListColumns = JSON.stringify(kc);
           localStorage.kcList = JSON.stringify(this.kcList);
         }
         console.log("库存地", JSON.stringify(this.kcList));
@@ -641,6 +700,7 @@ export default {
     this.getCostCenterData();
     this.getTheInventoryLocationData();
     this.getReceivingPatyData();
+    this.onConfirm(new Date());
   },
   mounted() {
     window.callByAndroid = this.callByAndroid;

@@ -227,54 +227,62 @@ export default {
         return;
       }
       let dataList = [];
-      let flag = true;
+      let flag = true; //物料总数要少于申请数量
       let flaginfo = true; //判断是否库存地,成本中心,收货方是否没有选择
+      let materialListSize = true; //判断是否有物料没扫
       this.info.oddList.forEach((i) => {
-        i.materialList.forEach((t) => {
-          if (
-            t.KOSTL != null &&
-            t.KTEXT != null &&
-            t.LGORT != null &&
-            t.WEMPF != null
-          ) {
-            dataList.push({
-              BARCODE: t.BARCODE, //物料描述
-              ITEM: t.ITEM,
-              KOSTL: t.KOSTL, //成本中心
-              KTEXT: t.KTEXT, //成本中心姓名
-              LGORT: t.LGORT, //库存地
-              LGOBE: t.LGOBE,
-              WERKS: this.factoryCode,
-              BUKRS: this.companyCode,
-              MENGE: parseInt(t.MENGE),
-              WEMPF: t.WEMPF, //收货方
-            });
-          } else {
-            flaginfo = false;
-            console.log(JSON.stringify(t));
-          }
-          console.log(
-            i.APPLY_NUM +
-              "-----" +
-              parseInt(t.MENGE) +
-              "----" +
-              (i.APPLY_NUM <= parseInt(t.MENGE))
-          );
-          if (i.APPLY_NUM >= parseInt(t.MENGE)) {
-            flag = true;
-            return;
-          } else {
-            flag = false;
-            Toast("物料号" + i.SP_CODE + "请检查申请数量");
-          }
-        });
+        console.log(JSON.stringify(i));
+        let num = 0;
+        if (i.materialList.length > 0) {
+          i.materialList.forEach((t) => {
+            num = num + parseInt(t.MENGE);
+            if (t.KOSTL != null && t.KTEXT != null && t.LGORT != null) {
+              dataList.push({
+                BARCODE: t.BARCODE, //物料描述
+                ITEM: t.ITEM,
+                KOSTL: t.KOSTL, //成本中心
+                KTEXT: t.KTEXT, //成本中心姓名
+                LGORT: t.LGORT, //库存地
+                LGOBE: t.LGOBE,
+                WERKS: this.factoryCode,
+                BUKRS: this.companyCode,
+                MENGE: parseInt(t.MENGE),
+                WEMPF: t.WEMPF, //收货方
+              });
+            } else {
+              flaginfo = false;
+              console.log(JSON.stringify(t));
+            }
+            console.log(
+              i.APPLY_NUM +
+                "-----" +
+                parseInt(t.MENGE) +
+                "----" +
+                (i.APPLY_NUM <= parseInt(t.MENGE))
+            );
+            if (i.APPLY_NUM >= num) {
+              flag = true;
+              return;
+            } else {
+              flag = false;
+              Toast("物料号" + i.SP_CODE + "请检查申请数量");
+            }
+          });
+        } else {
+          materialListSize = false;
+        }
       });
       if (!flaginfo) {
         //有数据没选择库存地,成本中心,收货方
         Toast("有数据库存地,成本中心,收货方没有选择");
         return;
       }
-
+      if (!materialListSize) {
+        //有数据没选择库存地,成本中心,收货方
+        Toast("请检查是否有物料没有扫码");
+        return;
+      }
+      console.log("到了");
       if (dataList.length > 0) {
         if (flag) {
           Toast.loading({
@@ -297,16 +305,24 @@ export default {
             .then((res) => {
               Toast.clear();
               // Toast.success(res.MESSAGE + "");
-              if (res != null && res.PICKID != "") {
+              if (res != null) {
                 // this.info.oddList = [];
                 // this.fanhui = res;
-                Dialog.alert({
-                  title: "返回消息",
-                  message: res.MESSAGE,
-                }).then(() => {
-                  this.$router.go(-1);
-                });
-                //
+                if (res.PICKID != null && res.PICKID != "") {
+                  Dialog.alert({
+                    title: "返回消息",
+                    message: res.MESSAGE,
+                  }).then(() => {
+                    this.$router.go(-1);
+                  });
+                } else {
+                  Dialog.alert({
+                    title: "返回消息",
+                    message: res.MESSAGE,
+                  }).then(() => {
+                    //this.$router.go(-1);
+                  });
+                }
               }
             })
             .catch((err) => {
