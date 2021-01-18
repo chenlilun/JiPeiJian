@@ -167,7 +167,7 @@ export default {
   data() {
     return {
       //qr 000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶
-      qr: "000000001000027264/190328/三角带SPB-2765 GB/T11544 橡胶",
+      qr: "",
       factoryCode: "",
       companyCode: "",
       pdaCode: "",

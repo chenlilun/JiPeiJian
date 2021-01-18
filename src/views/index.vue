@@ -222,28 +222,30 @@
       class="search-pop"
       :style="{ height: '100%', 'background-color': '#eee' }"
     >
-      <van-search
-        class="line"
-        show-action
-        v-model="locationActionText"
-        placeholder="请选择库存地"
-        style="border: 1px solid #ccc"
-        @input="locationOnSearch"
-        @cancel="locationAction = false"
-      />
-      <div
-        class="search-jg"
-        v-for="(item, index) in kcListColumns"
-        :key="index"
-      >
-        <div>{{ item.LGOBE + "-" + item.LGORT }}</div>
-
-        <van-button
-          style="border-radius: 10px; height: 30px"
-          type="info"
-          @click="onConfirmkcd(item, index)"
-          >确定</van-button
+      <div style="background-color: #ffffff height: 300px;padding: 10px;">
+        <van-search
+          class="line"
+          show-action
+          v-model="locationActionText"
+          placeholder="请选择库存地"
+          style="border: 1px solid #ccc"
+          @input="locationOnSearch"
+          @cancel="locationAction = false"
+        />
+        <div
+          class="search-jg"
+          v-for="(item, index) in kcListColumns"
+          :key="index"
         >
+          <div>{{ item.LGOBE + "-" + item.LGORT }}</div>
+
+          <van-button
+            style="border-radius: 10px; height: 30px"
+            type="info"
+            @click="onConfirmkcd(item, index)"
+            >确定</van-button
+          >
+        </div>
       </div>
     </van-popup>
     <van-popup
@@ -252,28 +254,30 @@
       :style="{ height: '100%', 'background-color': '#eee' }"
       position="bottom"
     >
-      <van-search
-        class="line"
-        show-action
-        v-model="cbzxText"
-        placeholder="请选择成本中心"
-        style="border: 1px solid #ccc"
-        @input="costCenterOnSearch"
-        @cancel="cbzx = false"
-      />
-      <div
-        class="search-jg"
-        v-for="(item, index) in costCenterListColumns"
-        :key="index"
-      >
-        <div>{{ item.KTEXT + "-" + item.KOSTL }}</div>
-
-        <van-button
-          style="border-radius: 10px; height: 35px"
-          type="info"
-          @click="onConfirmcbzx(item, index)"
-          >确定</van-button
+      <div style="background-color: #ffffff height: 300px;padding: 10px;">
+        <van-search
+          class="line"
+          show-action
+          v-model="cbzxText"
+          placeholder="请选择成本中心"
+          style="border: 1px solid #ccc"
+          @input="costCenterOnSearch"
+          @cancel="cbzx = false"
+        />
+        <div
+          class="search-jg"
+          v-for="(item, index) in costCenterListColumns"
+          :key="index"
         >
+          <div>{{ item.KTEXT + "-" + item.KOSTL }}</div>
+
+          <van-button
+            style="border-radius: 10px; height: 35px"
+            type="info"
+            @click="onConfirmcbzx(item, index)"
+            >确定</van-button
+          >
+        </div>
       </div>
     </van-popup>
     <van-popup v-model="shouhuo" class="two-pop" position="bottom">
@@ -298,7 +302,8 @@ export default {
   components: { [Dialog.Component.name]: Dialog.Component },
   data() {
     return {
-      qr: "000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶", //二维码数据
+      //000000001000016550/190328/三角带SPB-2765 GB/T11544 橡胶
+      qr: "", //二维码数据
       userId: "",
       name: "",
       userInfoName: "",
@@ -306,8 +311,8 @@ export default {
       companyCode: "",
       pdaCode: "",
       calendarDate: "",
-      linliaodantime: new Date(2020, 5, 18),
-      // linliaodantime: new Date(),
+      // linliaodantime: new Date(2020, 5, 18),
+      linliaodantime: new Date(),
       calendarShow: false,
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2050, 10, 1),
